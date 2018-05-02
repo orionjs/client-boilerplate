@@ -1,0 +1,7 @@
+.orion_primary {
+  background-color: #0069ff;
+}
+
+.orion_primary:active {
+  background-color: #3385fb;
+}
