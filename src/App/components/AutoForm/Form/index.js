@@ -2,44 +2,74 @@ import React from 'react'
 import styles from './styles.css'
 import PropTypes from 'prop-types'
 import {Form} from 'simple-react-form'
-import Param from './Param'
 import autobind from 'autobind-decorator'
 import {getValidationErrors} from '@orion-js/schema'
 
 export default class AutoFormForm extends React.Component {
   static propTypes = {
     params: PropTypes.object,
-    schema: PropTypes.object,
-    schemaToField: PropTypes.func,
+    children: PropTypes.node,
     state: PropTypes.object,
-    onChange: PropTypes.func
+    onChange: PropTypes.func,
+    setRef: PropTypes.func,
+    mutate: PropTypes.func,
+    onSuccess: PropTypes.func
   }
 
   static defaultProps = {
-    onChange: () => {}
+    onChange: () => {},
+    onSuccess: () => {}
   }
 
   state = {}
 
-  setRef(form) {
-    this.form = form
+  @autobind
+  submit() {
+    return this.form.submit()
+  }
+
+  handleError(error) {
+    if (error.graphQLErrors) {
+      for (const graphQLError of error.graphQLErrors) {
+        if (graphQLError.validationErrors) {
+          console.log('Validation errors', graphQLError.validationErrors)
+          this.setState({validationErrors: graphQLError.validationErrors})
+        } else {
+          console.log(graphQLError)
+          alert(error.message)
+        }
+      }
+    } else {
+      console.error(error)
+      alert(error.message)
+    }
   }
 
   @autobind
-  submit() {
-    this.form.submit()
-  }
-
-  onSubmit(data) {
-    alert(data)
+  async onSubmit(data) {
+    this.setState({loading: true, validationErrors: null})
+    try {
+      const errors = await this.validate(data)
+      if (!errors) {
+        const result = await this.props.mutate(data)
+        await this.props.onSuccess(result)
+      }
+    } catch (error) {
+      this.handleError(error)
+    }
+    this.setState({loading: false})
   }
 
   @autobind
   async validate(doc) {
     this.setState({validationErrors: null})
     try {
-      const validationErrors = await getValidationErrors(this.props.schema, doc)
+      const validationErrors = await getValidationErrors(this.props.params, doc)
       this.setState({validationErrors})
+      if (validationErrors) {
+        console.log('validationErrors:', validationErrors)
+      }
+      return validationErrors
     } catch (error) {
       console.error('Error validating', error)
     }
@@ -49,37 +79,18 @@ export default class AutoFormForm extends React.Component {
   onChange(doc) {
     this.props.onChange(doc)
     this.setState({doc})
-    this.validate(doc)
-  }
-
-  renderFields(params) {
-    if (!params) return
-    if (Object.keys(params).length === 0) return
-
-    return Object.keys(params).map(key => {
-      return (
-        <Param
-          key={key}
-          field={params[key]}
-          fieldName={key}
-          schemaToField={this.props.schemaToField}
-        />
-      )
-    })
   }
 
   render() {
     return (
       <div className={styles.container}>
-        <pre>{JSON.stringify(this.props.schema, null, 2)}</pre>
-        <pre>{JSON.stringify(this.state.doc, null, 2)}</pre>
         <Form
-          ref={form => this.setRef(form)}
+          ref={this.props.setRef}
           state={this.props.state}
           errorMessages={this.state.validationErrors}
           onChange={this.onChange}
           onSubmit={this.onSubmit}>
-          {this.renderFields(this.props.params)}
+          {this.props.children}
         </Form>
       </div>
     )

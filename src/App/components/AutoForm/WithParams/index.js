@@ -7,6 +7,8 @@ import gql from 'graphql-tag'
   query mutationParams($name: ID) {
     mutationParams(name: $name) {
       name
+      result
+      basicResultQuery
       params
     }
   }
@@ -18,6 +20,6 @@ export default class WithSchema extends React.Component {
   }
 
   render() {
-    return this.props.children(this.props.mutationParams.params)
+    return this.props.children(this.props.mutationParams)
   }
 }

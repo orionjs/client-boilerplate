@@ -6,7 +6,6 @@ import {Form, Field} from 'simple-react-form'
 import Text from 'orionsoft-parts/lib/components/fields/Text'
 import autobind from 'autobind-decorator'
 import withMessage from 'orionsoft-parts/lib/decorators/withMessage'
-import {changePassword} from 'meteor-apollo-accounts'
 import {withApollo} from 'react-apollo'
 import PropTypes from 'prop-types'
 
@@ -28,7 +27,6 @@ export default class ChangePassword extends React.Component {
     }
     this.setState({loading: true, errorMessage: ''})
     try {
-      await changePassword({oldPassword, newPassword}, this.props.client)
       this.props.showMessage('Your password was changed correctly')
       this.setState({errorMessage: ''})
     } catch (error) {

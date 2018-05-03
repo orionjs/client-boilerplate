@@ -24,7 +24,7 @@ export default class Auth extends React.Component {
   }
 
   @autobind
-  onSuccess() {
+  onLogin() {
     const {location} = this.props
     if (location.state && location.state.nextPathname) {
       this.props.history.replace(location.state.nextPathname)
@@ -41,33 +41,12 @@ export default class Auth extends React.Component {
     )
   }
 
-  getOtherProps() {
-    return {
-      setError: error => {
-        if (error && typeof error === 'string') {
-          error = error.replace('GraphQL error: ', '')
-        }
-        this.setState({error})
-      },
-      setLoading: isLoading => this.setState({isLoading}),
-      isLoading: this.state.isLoading,
-      onSuccess: this.onSuccess,
-      ...this.props.params
-    }
-  }
-
-  renderError() {
-    if (!this.state.error) return
-    return <div className={styles.error}>{this.state.error}</div>
-  }
-
   render() {
-    const otherProps = this.getOtherProps()
+    const otherProps = {onLogin: this.onLogin}
     return (
       <div className={styles.container} style={{minHeight: window.innerHeight}}>
         <div className={styles.inner}>
           {this.renderLogo()}
-          {this.renderError()}
           <Switch>
             <Route path="/login" render={() => <Login {...otherProps} />} />
             <Route path="/register" render={() => <Register {...otherProps} />} />

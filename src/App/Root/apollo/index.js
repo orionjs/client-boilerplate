@@ -1,8 +1,7 @@
-import {onTokenChange} from 'meteor-apollo-accounts'
 import client from './client'
 
-onTokenChange(function() {
+/* onTokenChange(function() {
   client.resetStore()
-})
+}) */
 
 export default client

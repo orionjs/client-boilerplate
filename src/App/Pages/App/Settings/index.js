@@ -5,7 +5,7 @@ import Password from './Password'
 import Tabs from 'orionsoft-parts/lib/components/Tabs'
 import PropTypes from 'prop-types'
 import Container from 'orionsoft-parts/lib/components/Container'
-import forceLogin from 'orionsoft-parts/lib/decorators/forceLogin'
+import forceLogin from 'App/helpers/auth/forceLogin'
 
 @forceLogin
 export default class Layout extends React.Component {

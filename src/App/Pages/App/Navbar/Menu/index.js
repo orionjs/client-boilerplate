@@ -8,11 +8,10 @@ import LogoutIcon from 'react-icons/lib/md/exit-to-app'
 import autobind from 'autobind-decorator'
 import withGraphQL from 'react-apollo-decorators/lib/withGraphQL'
 import gql from 'graphql-tag'
-import {logout} from 'meteor-apollo-accounts'
-import {withApollo} from 'react-apollo'
 import sleep from 'orionsoft-parts/lib/helpers/sleep'
 import PropTypes from 'prop-types'
 import {withRouter, Link} from 'react-router-dom'
+import logout from 'App/helpers/auth/logout'
 
 @withGraphQL(
   gql`
@@ -30,13 +29,11 @@ import {withRouter, Link} from 'react-router-dom'
     loading: null
   }
 )
-@withApollo
 @withRouter
 export default class User extends React.Component {
   static propTypes = {
     history: PropTypes.object,
-    me: PropTypes.object,
-    client: PropTypes.object
+    me: PropTypes.object
   }
 
   state = {open: false}
@@ -63,7 +60,7 @@ export default class User extends React.Component {
 
   @autobind
   async logout() {
-    await logout(this.props.client)
+    await logout()
   }
 
   @autobind

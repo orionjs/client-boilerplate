@@ -13,9 +13,7 @@ export default class Root extends React.Component {
   render() {
     return (
       <ApolloProvider client={apolloClient}>
-        <OrionsoftProvider>
-          {this.props.children}
-        </OrionsoftProvider>
+        <OrionsoftProvider meProvider={false}>{this.props.children}</OrionsoftProvider>
       </ApolloProvider>
     )
   }

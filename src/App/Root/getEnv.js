@@ -1,5 +1,5 @@
 export default function() {
-  const isBeta = window.location.hostname.includes('dev.dashboard.orion.hosting')
-  const isProduction = !isBeta && window.location.hostname.includes('dashboard.orion.hosting')
+  const isBeta = window.location.hostname.includes('dev')
+  const isProduction = !isBeta && window.location.hostname.includes('.com')
   return isProduction ? 'prod' : 'dev'
 }
