@@ -31,14 +31,14 @@ export default class AutoFormField extends React.Component {
       const Component = this.props.schemaToField('array')
       return (
         <Field fieldName={this.props.fieldName} type={Component}>
-          {this.renderObjectFields(type[0].fields)}
+          {this.renderObjectFields(type[0])}
         </Field>
       )
     } else if (isPlainObject(type)) {
       const Component = this.props.schemaToField('plainObject')
       return (
         <Field fieldName={this.props.fieldName} type={Component}>
-          {this.renderObjectFields(type.fields)}
+          {this.renderObjectFields(type)}
         </Field>
       )
     } else {

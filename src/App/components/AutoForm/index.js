@@ -13,20 +13,22 @@ import {getValidationErrors, clean} from '@orion-js/schema'
 export default class AutoForm extends React.Component {
   static propTypes = {
     mutation: PropTypes.string,
-    state: PropTypes.object,
+    doc: PropTypes.object,
     onChange: PropTypes.func,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     fragment: PropTypes.any,
     onSuccess: PropTypes.func,
     clean: PropTypes.func,
     validate: PropTypes.func,
-    schema: PropTypes.object
+    schema: PropTypes.object,
+    omit: PropTypes.array
   }
 
   static defaultProps = {
     children: props => <Fields schemaToField={schemaToField} {...props} />,
     clean: async (schema, doc) => await clean(schema, doc),
-    validate: async (schema, doc) => await getValidationErrors(schema, doc)
+    validate: async (schema, doc) => await getValidationErrors(schema, doc),
+    omit: []
   }
 
   @autobind
@@ -36,7 +38,7 @@ export default class AutoForm extends React.Component {
 
   renderChildren({params}) {
     if (typeof this.props.children === 'function') {
-      return this.props.children({params, parent: this})
+      return this.props.children({params, parent: this, omit: this.props.omit})
     } else {
       return this.props.children
     }
@@ -62,7 +64,7 @@ export default class AutoForm extends React.Component {
               {mutate => (
                 <Form
                   setRef={form => (this.form = form)}
-                  state={this.state}
+                  doc={this.props.doc}
                   mutate={mutate}
                   onChange={this.onChange}
                   params={params}

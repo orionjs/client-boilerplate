@@ -10,7 +10,7 @@ export default class ObjectField extends ObjectComponent {
 
   static defaultProps = {
     ...ObjectComponent.defaultProps,
-    style: {marginTop: 20, marginBottom: 20, padding: 20}
+    style: {}
   }
 
   renderLabel() {

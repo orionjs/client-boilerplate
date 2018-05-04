@@ -8,7 +8,7 @@ export default class AutoFormForm extends React.Component {
   static propTypes = {
     params: PropTypes.object,
     children: PropTypes.node,
-    state: PropTypes.object,
+    doc: PropTypes.object,
     onChange: PropTypes.func,
     setRef: PropTypes.func,
     mutate: PropTypes.func,
@@ -90,7 +90,7 @@ export default class AutoFormForm extends React.Component {
       <div className={styles.container}>
         <Form
           ref={this.props.setRef}
-          state={this.props.state}
+          state={this.props.doc}
           errorMessages={this.state.validationErrors}
           onChange={this.onChange}
           onSubmit={this.onSubmit}>

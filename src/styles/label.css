@@ -6,3 +6,9 @@
 .label:first-child {
   margin-top: 0;
 }
+
+.description {
+  margin-top: 0px;
+  font-size: 14px;
+  color: #999999;
+}

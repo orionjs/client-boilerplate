@@ -42,21 +42,25 @@ export default class ChangePassword extends React.Component {
           <AutoForm
             mutation="changePassword"
             ref="form"
-            onSuccess={this.onSuccess}
+            onSuccess={() => this.props.showMessage('Your password was changed')}
             schema={this.schema}>
+            <div className="label">Current password</div>
             <Field
               fieldName="oldPassword"
               fieldType="password"
-              placeholder="Current Password"
+              placeholder="Current password"
               type={Text}
             />
             <div className={styles.divider} />
+            <div className="label">New password</div>
             <Field
               fieldName="newPassword"
               fieldType="password"
               placeholder="New Password"
               type={Text}
             />
+            <div className="description">Your password must be at least 8 characters long</div>
+            <div className="label">Confirm password</div>
             <Field fieldName="confirm" fieldType="password" placeholder="Confirm" type={Text} />
           </AutoForm>
           <br />

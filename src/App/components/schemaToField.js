@@ -1,5 +1,6 @@
 import ArrayComponent from 'orionsoft-parts/lib/components/fields/ArrayComponent'
 import Text from 'orionsoft-parts/lib/components/fields/Text'
+import Toggle from 'orionsoft-parts/lib/components/fields/Toggle'
 import ObjectField from './fields/ObjectField'
 import isArray from 'lodash/isArray'
 
@@ -7,7 +8,8 @@ const singleFieldMap = {
   email: Text,
   string: Text,
   array: ArrayComponent,
-  plainObject: ObjectField
+  plainObject: ObjectField,
+  boolean: Toggle
 }
 
 const arrayFieldMap = {}
