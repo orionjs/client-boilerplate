@@ -3,7 +3,6 @@ import styles from './styles.css'
 import PropTypes from 'prop-types'
 import {Form} from 'simple-react-form'
 import autobind from 'autobind-decorator'
-import {getValidationErrors} from '@orion-js/schema'
 
 export default class AutoFormForm extends React.Component {
   static propTypes = {
@@ -13,7 +12,10 @@ export default class AutoFormForm extends React.Component {
     onChange: PropTypes.func,
     setRef: PropTypes.func,
     mutate: PropTypes.func,
-    onSuccess: PropTypes.func
+    onSuccess: PropTypes.func,
+    schema: PropTypes.object,
+    clean: PropTypes.func,
+    validate: PropTypes.func
   }
 
   static defaultProps = {
@@ -51,7 +53,8 @@ export default class AutoFormForm extends React.Component {
     try {
       const errors = await this.validate(data)
       if (!errors) {
-        const result = await this.props.mutate(data)
+        const cleaned = await this.props.clean(this.props.params, data)
+        const result = await this.props.mutate(cleaned)
         await this.props.onSuccess(result)
       }
     } catch (error) {
@@ -64,7 +67,8 @@ export default class AutoFormForm extends React.Component {
   async validate(doc) {
     this.setState({validationErrors: null})
     try {
-      const validationErrors = await getValidationErrors(this.props.params, doc)
+      const cleaned = await this.props.clean(this.props.schema, doc)
+      const validationErrors = await this.props.validate(this.props.schema, cleaned)
       this.setState({validationErrors})
       if (validationErrors) {
         console.log('validationErrors:', validationErrors)

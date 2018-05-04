@@ -32,21 +32,24 @@ export default class WithMutation extends React.Component {
       .join(', ')
   }
 
-  getMutationText() {
+  getSubselection() {
     const fragment = this.props.fragment
+    if (!fragment) return ''
     const fragmentName = fragment.definitions[0].name.value
+    return `{...${fragmentName}}`
+  }
+
+  getMutationText() {
     return `
       mutation ${this.props.mutation} (${this.getArguments()}) {
-        result: ${this.props.mutation}  (${this.getParams()}) {
-          ...${fragmentName}
-        }
+        result: ${this.props.mutation}  (${this.getParams()}) ${this.getSubselection()}
       }
     `
   }
 
   getMutation() {
     const text = this.getMutationText()
-    const mutation = gql([text, ''], this.props.fragment)
+    const mutation = gql([text, ''], this.props.fragment || '')
     return async variables => {
       const {data} = await this.props.client.mutate({
         mutation,

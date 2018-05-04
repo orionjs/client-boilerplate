@@ -8,6 +8,7 @@ import autobind from 'autobind-decorator'
 import Fields from './Fields'
 import WithMutation from './WithMutation'
 import getFragment from './getFragment'
+import {getValidationErrors, clean} from '@orion-js/schema'
 
 export default class AutoForm extends React.Component {
   static propTypes = {
@@ -16,11 +17,16 @@ export default class AutoForm extends React.Component {
     onChange: PropTypes.func,
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     fragment: PropTypes.any,
-    onSuccess: PropTypes.func
+    onSuccess: PropTypes.func,
+    clean: PropTypes.func,
+    validate: PropTypes.func,
+    schema: PropTypes.object
   }
 
   static defaultProps = {
-    children: props => <Fields schemaToField={schemaToField} {...props} />
+    children: props => <Fields schemaToField={schemaToField} {...props} />,
+    clean: async (schema, doc) => await clean(schema, doc),
+    validate: async (schema, doc) => await getValidationErrors(schema, doc)
   }
 
   @autobind
@@ -60,7 +66,10 @@ export default class AutoForm extends React.Component {
                   mutate={mutate}
                   onChange={this.onChange}
                   params={params}
-                  onSuccess={this.props.onSuccess}>
+                  schema={this.props.schema || params}
+                  onSuccess={this.props.onSuccess}
+                  clean={this.props.clean}
+                  validate={this.props.validate}>
                   {this.renderChildren({params})}
                 </Form>
               )}

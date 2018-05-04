@@ -7,6 +7,7 @@ export default onError(({graphQLErrors, networkError, response, operation}) => {
   }
   if (networkError) {
     if (networkError.statusCode === 400 && networkError.result.error === 'AuthError') {
+      localStorage.setItem('session.userId', '')
       localStorage.setItem('session.publicKey', '')
       localStorage.setItem('session.secretKey', '')
       global.apolloClient.resetStore()

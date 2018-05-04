@@ -4,9 +4,10 @@ import fetch from 'unfetch'
 import JSSHA from 'jssha'
 
 const getAuthHeaders = function(body) {
+  const userId = localStorage.getItem('session.userId')
   const publicKey = localStorage.getItem('session.publicKey')
   const secretKey = localStorage.getItem('session.secretKey')
-  if (!publicKey || !secretKey) return {}
+  if (!userId || !publicKey || !secretKey) return {}
 
   const nonce = new Date().getTime()
   const shaObj = new JSSHA('SHA-512', 'TEXT')

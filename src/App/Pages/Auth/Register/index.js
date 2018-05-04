@@ -5,17 +5,27 @@ import Text from 'orionsoft-parts/lib/components/fields/Text'
 import Button from 'orionsoft-parts/lib/components/Button'
 import ObjectField from 'App/components/fields/ObjectField'
 import autobind from 'autobind-decorator'
+import PropTypes from 'prop-types'
+import withUserId from 'App/helpers/auth/withUserId'
+import LoggedIn from '../LoggedIn'
 
+@withUserId
 export default class Login extends React.Component {
-  static propTypes = {}
+  static propTypes = {
+    onLogin: PropTypes.func,
+    userId: PropTypes.string
+  }
 
   @autobind
-  onSuccess({publicKey, secretKey}) {
+  onSuccess({userId, publicKey, secretKey}) {
+    localStorage.setItem('session.userId', userId)
     localStorage.setItem('session.publicKey', publicKey)
     localStorage.setItem('session.secretKey', secretKey)
+    this.props.onLogin()
   }
 
   render() {
+    if (this.props.userId) return <LoggedIn />
     return (
       <div>
         <AutoForm mutation="createUser" ref="form" onSuccess={this.onSuccess}>

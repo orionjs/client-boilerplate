@@ -1,13 +1,15 @@
 import React from 'react'
-import isLoggedIn from './isLoggedIn'
 import {withRouter} from 'react-router'
 import PropTypes from 'prop-types'
+import withUserId from './withUserId'
 
 export default function(ComposedComponent) {
   @withRouter
+  @withUserId
   class ForceLogin extends React.Component {
     static propTypes = {
-      history: PropTypes.object
+      history: PropTypes.object,
+      userId: PropTypes.string
     }
 
     redirect() {
@@ -19,7 +21,7 @@ export default function(ComposedComponent) {
     }
 
     render() {
-      if (!isLoggedIn()) return this.redirect()
+      if (!this.props.userId) return this.redirect()
       return <ComposedComponent {...this.props} />
     }
   }
