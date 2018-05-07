@@ -7,6 +7,7 @@ import AutoForm from 'App/components/AutoForm'
 import Text from 'orionsoft-parts/lib/components/fields/Text'
 import withMessage from 'orionsoft-parts/lib/decorators/withMessage'
 import PropTypes from 'prop-types'
+import LockIcon from 'react-icons/lib/md/lock'
 
 @withMessage
 export default class ChangePassword extends React.Component {
@@ -64,7 +65,7 @@ export default class ChangePassword extends React.Component {
             <Field fieldName="confirm" fieldType="password" placeholder="Confirm" type={Text} />
           </AutoForm>
           <br />
-          <Button onClick={() => this.refs.form.submit()} primary>
+          <Button icon={LockIcon} onClick={() => this.refs.form.submit()} primary>
             Change Password
           </Button>
         </Section>

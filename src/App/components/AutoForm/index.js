@@ -18,6 +18,7 @@ export default class AutoForm extends React.Component {
     children: PropTypes.oneOfType([PropTypes.func, PropTypes.node]),
     fragment: PropTypes.any,
     onSuccess: PropTypes.func,
+    onValidationError: PropTypes.func,
     clean: PropTypes.func,
     validate: PropTypes.func,
     schema: PropTypes.object,
@@ -28,12 +29,14 @@ export default class AutoForm extends React.Component {
     children: props => <Fields schemaToField={schemaToField} {...props} />,
     clean: async (schema, doc) => await clean(schema, doc),
     validate: async (schema, doc) => await getValidationErrors(schema, doc),
-    omit: []
+    omit: [],
+    onSuccess: () => {},
+    onValidationError: () => {}
   }
 
   @autobind
   submit() {
-    this.form.submit()
+    return this.form.submit()
   }
 
   renderChildren({params}) {
@@ -70,6 +73,7 @@ export default class AutoForm extends React.Component {
                   params={params}
                   schema={this.props.schema || params}
                   onSuccess={this.props.onSuccess}
+                  onValidationError={this.props.onValidationError}
                   clean={this.props.clean}
                   validate={this.props.validate}>
                   {this.renderChildren({params})}

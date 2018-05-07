@@ -8,16 +8,24 @@ import PropTypes from 'prop-types'
 import withGraphQL from 'react-apollo-decorators/lib/withGraphQL'
 import gql from 'graphql-tag'
 
+const fragment = gql`
+  fragment setUserProfileFragment on User {
+    _id
+    profile {
+      name
+      firstName
+      lastName
+    }
+  }
+`
+
 @withGraphQL(gql`
   query getMyProfile {
     me {
-      _id
-      profile {
-        firstName
-        lastName
-      }
+      ...setUserProfileFragment
     }
   }
+  ${fragment}
 `)
 @withMessage
 export default class Profile extends React.Component {
@@ -37,6 +45,7 @@ export default class Profile extends React.Component {
             ref="form"
             doc={{userId: this.props.me._id, profile: this.props.me.profile}}
             onSuccess={() => this.props.showMessage('Your profile was saved')}
+            fragment={fragment}
             omit={['userId']}
           />
           <br />

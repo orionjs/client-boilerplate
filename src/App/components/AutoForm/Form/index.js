@@ -13,14 +13,14 @@ export default class AutoFormForm extends React.Component {
     setRef: PropTypes.func,
     mutate: PropTypes.func,
     onSuccess: PropTypes.func,
+    onValidationError: PropTypes.func,
     schema: PropTypes.object,
     clean: PropTypes.func,
     validate: PropTypes.func
   }
 
   static defaultProps = {
-    onChange: () => {},
-    onSuccess: () => {}
+    onChange: () => {}
   }
 
   state = {}
@@ -36,6 +36,7 @@ export default class AutoFormForm extends React.Component {
         if (graphQLError.validationErrors) {
           console.log('Validation errors', graphQLError.validationErrors)
           this.setState({validationErrors: graphQLError.validationErrors})
+          this.props.onValidationError(graphQLError.validationErrors)
         } else {
           console.log(graphQLError)
           alert(error.message)
@@ -72,6 +73,7 @@ export default class AutoFormForm extends React.Component {
       this.setState({validationErrors})
       if (validationErrors) {
         console.log('validationErrors:', validationErrors)
+        this.props.onValidationError(validationErrors)
       }
       return validationErrors
     } catch (error) {

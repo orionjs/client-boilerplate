@@ -10,7 +10,7 @@ import withUserId from 'App/helpers/auth/withUserId'
 import LoggedIn from '../LoggedIn'
 
 @withUserId
-export default class Login extends React.Component {
+export default class Register extends React.Component {
   static propTypes = {
     onLogin: PropTypes.func,
     userId: PropTypes.string
@@ -42,7 +42,7 @@ export default class Login extends React.Component {
             </div>
           </Field>
           <div className="label">Email</div>
-          <Field fieldName="email" type={Text} placeholder="Email" />
+          <Field fieldName="email" type={Text} fieldType="email" placeholder="Email" />
           <div className="label">Password</div>
           <Field fieldName="password" type={Text} fieldType="password" placeholder="Password" />
         </AutoForm>
